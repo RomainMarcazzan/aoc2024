@@ -1,7 +1,6 @@
-import { log } from "console";
 import fs from "fs";
 
-const data = fs.readFileSync("data-test.txt", "utf8");
+const data = fs.readFileSync("data.txt", "utf8");
 const lines = data.split("\n").map((l) => l.trim().split(" "));
 
 const clean = lines.map((l) => l.filter((a) => a !== "").map((s) => Number(s)));
@@ -14,22 +13,21 @@ for (let i = 0; i < clean.length; i++) {
   arr2.push(clean[i][1]);
 }
 
-const countOccurrences = (arr) => {
-  const acc = {};
-  for (let i = 0; i < arr.length; i++) {
-    const num = arr[i];
-    acc[num] = (acc[num] || 0) + 1;
+let map = {};
+
+arr2.forEach((e) => {
+  if (map[e] === undefined) {
+    map[e] = 1;
+  } else {
+    map[e]++;
   }
-  return acc;
-};
+});
 
-const arr2Counts = countOccurrences(arr2);
-log({ arr2Counts });
+let result = 0;
 
-let similarityScore = 0;
 for (let i = 0; i < arr1.length; i++) {
-  const num = arr1[i];
-  similarityScore += num * (arr2Counts[num] || 0);
+  if (map[arr1[i]]) {
+    result += arr1[i] * map[arr1[i]];
+  }
 }
-
-log({ arr1, arr2, similarityScore });
+console.log("result", result);
